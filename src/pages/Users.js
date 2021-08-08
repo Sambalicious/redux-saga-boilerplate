@@ -1,36 +1,29 @@
 import React from "react";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getUser } from "../redux/actions/users";
+import { getUser } from "../redux/ducks/userSlice";
+import { getUsers } from "../redux/ducks/usersSlice";
 
 const Users = () => {
   const { users, error, loading } = useSelector((state) => state.users);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch]);
-  useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch]);
-  useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch]);
-  useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch]);
-  useEffect(() => {
-    dispatch(getUser());
+    dispatch(getUsers());
   }, [dispatch]);
 
-  console.log(users);
+  console.log(user);
 
   return (
     <div>
-      <div>{loading ? <div>...loading ...</div> : <div>{error}</div>}</div>
-      {users?.map((user, i) => (
-        <div key={i}>{user.name} </div>
-      ))}
+      {loading ? <div>...loading...</div> : <div>{error} </div>}
+      {users?.length > 0 &&
+        users.map((user, i) => (
+          <div onClick={() => dispatch(getUser({ id: user.id }))} key={i}>
+            {user.name} {user.id}
+          </div>
+        ))}
     </div>
   );
 };

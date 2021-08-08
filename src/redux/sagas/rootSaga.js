@@ -1,7 +1,16 @@
-import { takeLatest } from "redux-saga/effects";
-import { GET_USERS } from "../types";
+import { all, fork, takeLatest } from "redux-saga/effects";
+import { getUsers } from "../ducks/usersSlice";
+import { getUser } from "../ducks/userSlice";
 import { handleGetAllUsers } from "./handlers/users";
+import { handleGetOneUsers } from "./handlers/user";
 
 export function* watcherSaga() {
-  yield takeLatest(GET_USERS, handleGetAllUsers);
+  yield all([fork(getAllUserSaga), fork(getOneUserSaga)]);
+}
+
+function* getAllUserSaga() {
+  yield takeLatest(getUsers.type, handleGetAllUsers);
+}
+function* getOneUserSaga() {
+  yield takeLatest(getUser.type, handleGetOneUsers);
 }
